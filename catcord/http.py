@@ -24,10 +24,16 @@ class CatNip:
         """Request a route from the API."""
         log.info(f'{verb} request to {route}')
         async with self.sess.request(verb, self._route(route),
-                                     json=payload) as resp:
+                                     json=payload,
+                                     headers=self.headers) as resp:
             return resp
 
     async def get(self, route, payload=None):
         """Make a GET request to the API."""
         resp = await self.request('GET', route, payload)
+        return await resp.json()
+
+    async def post(self, route, payload=None):
+        """Make a POST request to the API."""
+        resp = await self.request('POST', route, payload)
         return await resp.json()
